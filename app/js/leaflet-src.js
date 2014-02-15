@@ -2482,7 +2482,7 @@ L.TileLayer = L.Class.extend({
 			shardingFunction: function (key) {
 				return key[0];
 			}
-		}, callback);
+		}, callback.bind(this));
 	},
 
 	onAdd: function (map) {
