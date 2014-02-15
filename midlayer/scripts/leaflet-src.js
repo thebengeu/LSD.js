@@ -2933,6 +2933,32 @@ L.TileLayer = L.Class.extend({
 	    oReq.send(null);
 	},
 
+	getTileCoords: function () {
+		var bounds = this._map.getPixelBounds();
+	    var tileSize = this._getTileSize();
+	    var z = this._map.getZoom();
+
+	    bounds = L.bounds(
+	        bounds.min.divideBy(tileSize)._floor(),
+	        bounds.max.divideBy(tileSize)._floor());
+		
+	    coords = [];
+
+		for (var j = bounds.min.y; j <= bounds.max.y; j++) {
+	        for (var i = bounds.min.x; i <= bounds.max.x; i++) {
+	        	var y = (i/Math.pow(2,z)*360-180);
+	        	if (y < 180) {
+	        		y = 360 + y;
+	        	}
+
+	        	var n = Math.PI-2*Math.PI*j/Math.pow(2,z);
+  				var x = (180/Math.PI*Math.atan(0.5*(Math.exp(n)-Math.exp(-n))));
+	        }
+	    }
+
+	    return coords;
+	},
+
 	preCache: function () {
 	    var bounds = this._map.getPixelBounds();
 	    var tileSize = this._getTileSize();

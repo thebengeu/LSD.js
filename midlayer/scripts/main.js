@@ -15,3 +15,7 @@ hello.addTo(map);
 function preCache() {
   hello.preCache();
 }
+
+function getCoords() {
+  console.log(hello.getTileCoords());
+}
