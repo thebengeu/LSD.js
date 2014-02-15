@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="../app/css/leaflet.css"/>
+    <style>
+      body {
+        padding-top: 40px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="#">LSD.js</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="#">Demo</a></li>
+              <li><a href="#about" onClick="cacheMap()">Cache Me!</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+
+        </div>
+
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div id="map" style="position: absolute; top: 40; left: 0; width: 100%; height: 100%;"></div>
+
+    </div> <!-- /container -->
+    <!-- Le javascript
+    ================================================== -->
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="../app/js/localforage.js"></script>
+    <script src="../app/js/leaflet-src.js"></script>
+    <script type="text/javascript" src="http://oauth.googlecode.com/svn/code/javascript/oauth.js"></script>
+    <script type="text/javascript" src="http://oauth.googlecode.com/svn/code/javascript/sha1.js"></script>
+    <script src="yelp_js/dist/localForage.js"></script>
+    <script src="yelp_js/yelp.js"></script>
+    <script src="yelp_js/main.js"></script>
+
+    <script>
+    var map = L.map('map').setView([1.28251, 103.85104], 10);
+
+    var hello = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: 'Map data &copy; 2013 OpenStreetMap contributors'
+    });
+    hello.addTo(map);
+
+    function doSomething(e) {
+      var search = document.getElementById('search').value;
+      console.log
+    }
+
+    var marker = new Array();
+    function onMapClick(e) {
+
+      if(marker.length != 0) {
+        for (i = 0; i < marker.length; i++) {
+          map.removeLayer(marker[i]);
+        }
+      }
+
+      //Extend the Default marker class
+      var RedIcon = L.Icon.Default.extend({
+          options: {
+                iconUrl: '../app/images/marker-icon-red.png',
+                shadowUrl: '../app/images/marker-shadow.png'
+          }
+      });
+      var redIcon = new RedIcon();
+
+      var BlueIcon = L.Icon.Default.extend({
+          options: {
+                iconUrl: '../app/images/marker-icon.png',
+                shadowUrl: '../app/images/marker-shadow.png'
+          }
+      });
+      var blueIcon = new BlueIcon();
+
+      var tmpMarker = new L.marker(e.latlng, {icon: redIcon});
+      tmpMarker.bindPopup("You clicked the map at " + e.latlng.toString());
+      marker.push(tmpMarker);
+      map.addLayer(tmpMarker);
+
+      Yelp.setCredentials(
+        "sy_dqaaRlT6u_-Ilez-qyA",
+        "wwZjPzhHV1g5lj8TCB7daluc1l8",
+        "xk3agjfaF7pttsF-XmbVT9PjodN5fXiO",
+        "3Ejttk8-u56maYxZ3aP02ebMuWs"
+      );
+
+      Yelp.query(e.latlng['lat'] , e.latlng['lng'], 'food', getNearby);
+      function getNearby(data){
+        for (var i in data['businesses']){
+          var tmpLat = data['businesses'][i]['location']['coordinate']['latitude'];
+          var tmpLong = data['businesses'][i]['location']['coordinate']['longitude'];
+          var tmpMarker = new L.marker([tmpLat, tmpLong], {icon: blueIcon});
+          tmpMarker.bindPopup(data['businesses'][i]['name']);
+          marker.push(tmpMarker);
+          map.addLayer(tmpMarker);
+       }
+      }
+    } //End of onMapClick()
+
+    function cacheMap(e) {
+      hello.preCache();
+      alert("Cached!");
+    }
+
+    function getCoords(e) {
+      console.log(hello.getTileCoords());
+    }
+
+    function getAllAround(e) {
+      Yelp.setCredentials(
+        "sy_dqaaRlT6u_-Ilez-qyA",
+        "wwZjPzhHV1g5lj8TCB7daluc1l8",
+        "xk3agjfaF7pttsF-XmbVT9PjodN5fXiO",
+        "3Ejttk8-u56maYxZ3aP02ebMuWs"
+      );
+      var points = hello.getTileCoords();
+      for (var j in points) {
+        Yelp.query(points[j]['lat'], points[j]['lon'], 'food', getNearby);
+        function getNearby(data){
+          console.log(data);
+        }
+      }
+    }
+
+    map.on('zoomend', getAllAround);
+    map.on('click', onMapClick);
+
+  </script>
+
+
+  </body>
+</html>
