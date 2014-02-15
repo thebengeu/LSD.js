@@ -64,8 +64,7 @@
       for (var i in data['businesses']){
         var tmpLat = data['businesses'][i]['location']['coordinate']['latitude'];
         var tmpLong = data['businesses'][i]['location']['coordinate']['longitude'];
-        var tmpMarker = new L.marker([tmpLat, tmpLong], {icon: blueIcon} +
-          '<br><p>Hello world!<br />This is a nice popup.</p>');
+        var tmpMarker = new L.marker([tmpLat, tmpLong], {icon: blueIcon});
         tmpMarker.bindPopup(data['businesses'][i]['name']);
         marker.push(tmpMarker);
         map.addLayer(tmpMarker);
