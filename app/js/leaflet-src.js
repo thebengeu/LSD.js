@@ -2477,6 +2477,12 @@ L.TileLayer = L.Class.extend({
 		if (typeof subdomains === 'string') {
 			this.options.subdomains = subdomains.split('');
 		}
+
+		localforage.init({
+			shardingFunction: function (key) {
+				return key;
+			}
+		});
 	},
 
 	onAdd: function (map) {
@@ -2953,7 +2959,8 @@ L.TileLayer = L.Class.extend({
 
 	        	var n = Math.PI-2*Math.PI*j/Math.pow(2,z);
   				var x = (180/Math.PI*Math.atan(0.5*(Math.exp(n)-Math.exp(-n))));
-  				coords.push({'lat': x, 'lon': y});
+
+  				coords.push({'lat':x , 'lon':y});
 	        }
 	    }
 
@@ -9274,4 +9281,4 @@ L.Map.include({
 });
 
 
-}(window, document, window.localforage));
+}(window, document, window.LSD));
