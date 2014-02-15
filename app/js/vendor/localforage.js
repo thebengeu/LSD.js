@@ -1211,7 +1211,13 @@ requireModule('promise/polyfill').polyfill();
 
     // Open the database; the openDatabase API will automatically create it for
     // us if it doesn't exist.
-    var db = window.openDatabase(DB_NAME, DB_VERSION, STORE_NAME, DB_SIZE);
+    try {
+      var db = window.openDatabase(DB_NAME, DB_VERSION, STORE_NAME, DB_SIZE);
+    } catch (e) {
+      // Catch "SecurityError: DOM Exception 18: An attempt was made to break through the security policy of the user agent."
+      // when loaded in iframes.
+      return;
+    }
 
     // Create our key/value table if it doesn't exist.
     // TODO: Technically I can imagine this being as race condition, as I'm not
