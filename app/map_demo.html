@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Offline Map Cache Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="css/leaflet.css"/>
+    <style>
+      body {
+        padding-top: 40px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="#">LSD.js</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="#">Demo</a></li>
+              <li><a href="#about" class="cache-me">Cache Me!</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+
+        </div>
+
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div id="map" style="position: absolute; top: 40; left: 0; width: 100%; height: 100%;"></div>
+
+    </div> <!-- /container -->
+    <!-- Le javascript
+    ================================================== -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="js/vendor/bootstrap.min.js"></script>
+    <script src="js/vendor/lru.js"></script>
+    <script src="js/crossforage.js"></script>
+    <script src="js/LSD.js"></script>
+    <script src="js/vendor/localforage.js"></script>
+    <script src="js/leaflet-src.js"></script>
+    <script src="//oauth.googlecode.com/svn/code/javascript/oauth.js"></script>
+    <script src="//oauth.googlecode.com/svn/code/javascript/sha1.js"></script>
+    <script src="js/yelp.js"></script>
+    <script src="js/map_demo.js"></script>
+  </body>
+</html>
