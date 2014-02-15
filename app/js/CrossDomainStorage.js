@@ -64,7 +64,6 @@
     unload: function () {
       if (this._iframe) {
         document.body.removeChild(this._iframe);
-        console.log(this._iframe);
       }
     },
 
@@ -72,7 +71,9 @@
       this._queueRequest({
         method: 'getItem',
         key: key
-      }, callback);
+      }, function (data) {
+        callback(data.value);
+      });
     },
 
     setItem: function (key, value, callback) {
@@ -80,20 +81,26 @@
         method: 'setItem',
         key: key,
         value: value
-      }, callback);
+      }, function (data) {
+        callback(data.length);
+      });
     },
 
     removeItem: function (key, callback) {
       this._queueRequest({
         method: 'removeItem',
         key: key
-      }, callback);
+      }, function () {
+        callback();
+      });
     },
 
     clear: function (callback) {
       this._queueRequest({
         method: 'clear'
-      }, callback);
+      }, function () {
+        callback();
+      });
     },
 
     //private methods

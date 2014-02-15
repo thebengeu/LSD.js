@@ -17,6 +17,7 @@
 
   var shards;
   var shardStores = {};
+  var shardLengths = {};
 
   // shardingFunction returns shard id for given key
   var shardingFunction = function (key) {
@@ -42,7 +43,7 @@
       var options = options || {};
       shardingFunction = options.shardingFunction;
       shardIdToDomain = options.shardIdToDomain || shardIdToDomain;
-      localforage.getItem('shards', function (value) {
+      localforage.getItem('__LSD_SHARDS__', function (value) {
         shards = value || {};
         if (callback) {
           callback();
@@ -52,13 +53,16 @@
     getShards: function () {
       return shards;
     },
+    getShardLengths: function () {
+      return shardLengths;
+    },
     getItem: function (key, callback) {
       var shardId = shardingFunction(key);
       var shard = shards[shardId];
       if (shard) {
         var shardStore = shardStores[shardId];
         if (!shardStore) {
-          shardStore = shardStores[shardId] = new CrossDomainStorage(shardIdToDomain(shardId), '/LSD.html')
+          shardStore = shardStores[shardId] = new CrossDomainStorage(shardIdToDomain(shardId), '/LSD.html');
         }
         shardStore.getItem(key, callback);
       } else if (callback) {
@@ -67,19 +71,21 @@
     },
     setItem: function (key, value, callback) {
       var shardId = shardingFunction(key);
-      var shard = shards[shardId];
-      if (!shard) {
-        shard = shards[shardId] = {
-          length: 0
-        };
+      if (!shards[shardId]) {
+        shards[shardId] = true;
+        localforage.setItem('__LSD_SHARDS__', shards);
+
+        // store length
+        localforage.setItem(shardId, 0);
+        shardLengths[shardId] = 0;
       }
       var shardStore = shardStores[shardId];
       if (!shardStore) {
-        shardStore = shardStores[shardId] = new CrossDomainStorage(shardIdToDomain(shardId), '/LSD.html')
+        shardStore = shardStores[shardId] = new CrossDomainStorage(shardIdToDomain(shardId), '/LSD.html');
       }
-      shardStore.setItem(key, value, function () {
-        shard.length += value.length;
-        localforage.setItem('shards', shards);
+      shardStore.setItem(key, value, function (newShardLength) {
+        shardLengths[shardId] = newShardLength;
+        localforage.setItem(shardId, newShardLength);
         if (callback) {
           callback();
         }
