@@ -4,8 +4,9 @@
   var hello = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
     maxZoom: 18,
     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+  }, function () {
+    this.addTo(map);
   });
-  hello.addTo(map);
 
   function doSomething(e) {
     var search = document.getElementById('search').value;
