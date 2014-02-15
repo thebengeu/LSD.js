@@ -96,5 +96,5 @@
   }
 
   map.on('zoomend', getAllAround);
-  map.on('click', onMapClick);
+  map.click(onMapClick);
 })();
