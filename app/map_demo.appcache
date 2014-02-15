@@ -4,12 +4,6 @@ CACHE MANIFEST
 
 CACHE:
 
-#images
-
-
-#internal HTML documents
-map_demo.html
-
 #style sheets
 css/bootstrap-responsive.css
 css/bootstrap.css
