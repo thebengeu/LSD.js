@@ -72,11 +72,22 @@
         method: 'getItem',
         key: key
       }, function (data) {
-        callback(data.value);
+        if (data.value) {
+          var result = JSON.parse(data.value);
+        }
+
+        callback(result);
       });
     },
 
     setItem: function (key, value, callback) {
+      try {
+        value = JSON.stringify(value);
+      } catch (e) {
+        console.error("Couldn't convert value into a JSON string: ", value);
+        callback(-1);
+      }
+
       this._queueRequest({
         method: 'setItem',
         key: key,
