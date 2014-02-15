@@ -22,7 +22,7 @@ Yelp = function () {
     };
 
 
-    // Query yelp for stuffz
+    // Private function to Query yelp for stuffz
     sync = function(la, lo, term, callBack) {
         var parameters = [];
         parameters.push(['callback', 'cb']);
@@ -72,28 +72,17 @@ Yelp = function () {
                     function(data,
                         textStats,
                         XMLHttpRequest) {
-                            console.log(data);
-                            //data = jQuery.parseJSON(data);
                             var key = queries[x].toString();
                             localforage.setItem(key, data['businesses'], function(result){console.log(result);});
                             callBack(data);
                         }
                 });
-            });
+            })(i);
         }
 
     };
 
-    // Store query
-    store = function(key, value) {
-        var users = [ {id: 1, fullName: 'Matt'}, {id: 2, fullName: 'Bob'} ];
-        localforage.setItem('users', users, function(result) {
-            console.log(result);
-            localforage.getItem('users', function(result){alert(result);});
-        });
-    };
-
-    // Query
+    // User Query
     query = function(la, lo, term, callBack) {
         localforage.getItem(la.toFixed(3).toString() + ',' + lo.toFixed(3).toString(), 
                 function(data){
@@ -110,7 +99,6 @@ Yelp = function () {
 
     return {
         "setCredentials": setCredentials,
-            "sync": sync,
             "query": query
     }
 
