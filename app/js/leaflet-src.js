@@ -2485,7 +2485,7 @@ L.TileLayer = L.Class.extend({
 				var x = parseInt(keyArr[4]);
 				var y = parseInt(keyArr[5].split('.')[0]);
 
-				return zoom + '-' + ((x / 50) * 50) + '-' + ((y / 50) * 50);
+				return zoom + '-' + (floor(x / 50) * 50) + '-' + (floor(y / 50) * 50);
 			}
 		}, callback.bind(this));
 	},
