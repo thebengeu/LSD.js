@@ -3,7 +3,7 @@ Yelp = window.Yelp || {};
 Yelp = function () {
     var auth = {};
     var accessor = {};
-
+    var TRUNCATE = 2;
     // Sets app's credentials
     setCredentials = function(ck, cs, at, ats) {
         auth = {
@@ -44,8 +44,8 @@ Yelp = function () {
             var temp_latitude = la + i/100.0;
             for (var j = -1; j < 1; j++) {
                 var temp_longitude = lo + j/100.0;
-                queries.push(temp_latitude.toFixed(3) + ',' +
-                        temp_longitude.toFixed(3));
+                queries.push(temp_latitude.toFixed(TRUNCATE) + ',' +
+                        temp_longitude.toFixed(TRUNCATE));
             }
         }
         console.log(queries);
@@ -84,7 +84,7 @@ Yelp = function () {
 
     // User Query
     query = function(la, lo, term, callBack) {
-        localforage.getItem(la.toFixed(3).toString() + ',' + lo.toFixed(3).toString(), 
+        localforage.getItem(la.toFixed(TRUNCATE).toString() + ',' + lo.toFixed(TRUNCATE).toString(), 
                 function(data){
                     if (!data){
                         sync(la, lo, term, callBack);
@@ -94,7 +94,7 @@ Yelp = function () {
                     }
                 }
                 );
-        console.log(la.toFixed(3).toString() + ',' + lo.toFixed(3).toString());
+        console.log(la.toFixed(TRUNCATE).toString() + ',' + lo.toFixed(TRUNCATE).toString());
     }
 
     return {
