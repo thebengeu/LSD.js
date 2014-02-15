@@ -41,9 +41,9 @@ Yelp = function () {
 
         var queries = [];
 
-        for(var i = -1; i < 1; i ++) {
+        for(var i = 0; i < 1; i ++) {
             var temp_latitude = la + i/100.0;
-            for (var j = -1; j < 1; j++) {
+            for (var j = 0; j < 1; j++) {
                 var temp_longitude = lo + j/100.0;
                 queries.push(temp_latitude.toFixed(TRUNCATE) + ',' +
                         temp_longitude.toFixed(TRUNCATE));
