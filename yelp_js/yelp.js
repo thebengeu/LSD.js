@@ -73,7 +73,7 @@ Yelp = function () {
                         textStats,
                         XMLHttpRequest) {
                             var key = queries[x].toString();
-                            localforage.setItem(key, data['businesses'], function(result){console.log(result);});
+                            localforage.setItem(key, data, function(result){console.log(result);});
                             callBack(data);
                         }
                 });
