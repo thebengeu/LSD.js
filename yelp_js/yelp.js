@@ -4,6 +4,7 @@ Yelp = function () {
     var auth = {};
     var accessor = {};
     var TRUNCATE = 2;
+    var PREFIX_KEY = 'YELP_';
     // Sets app's credentials
     var setCredentials = function(ck, cs, at, ats) {
         auth = {
@@ -62,6 +63,8 @@ Yelp = function () {
             parameterMap.oauth_signature = OAuth.percentEncode(parameterMap.oauth_signature);
             console.log(parameterMap);
 
+            // Not exactly the most efficient way to sync - many overwrites
+            // but would still work well in covering the area
             (function(x) {
                 $.ajax({
                     'url': message.action,
@@ -72,7 +75,7 @@ Yelp = function () {
                     function(data,
                         textStats,
                         XMLHttpRequest) {
-                            var key = queries[x].toString();
+                            var key = PREFIX_KEY + queries[x].toString();
                             localforage.setItem(key, data, function(result){console.log(result);});
                             callBack(data);
                         }
@@ -84,7 +87,8 @@ Yelp = function () {
 
     // User Query
     var query = function(la, lo, term, callBack) {
-        localforage.getItem(la.toFixed(TRUNCATE).toString() + ',' + lo.toFixed(TRUNCATE).toString(), 
+        localforage.getItem(PREFIX_KEY + la.toFixed(TRUNCATE).toString() + 
+                ',' + lo.toFixed(TRUNCATE).toString(), 
                 function(data){
                     if (!data){
                         sync(la, lo, term, callBack);
@@ -92,14 +96,11 @@ Yelp = function () {
                     else {
                         callBack(data);
                     }
-                }
-                );
-        console.log(la.toFixed(TRUNCATE).toString() + ',' + lo.toFixed(TRUNCATE).toString());
+                });
     }
 
     return {
         "setCredentials": setCredentials,
             "query": query
     }
-
 }();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
