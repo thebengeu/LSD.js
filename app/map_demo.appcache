@@ -1,0 +1,38 @@
+CACHE MANIFEST
+
+#version 1.0 2-16-2014
+
+CACHE:
+
+#images
+
+
+#internal HTML documents
+map_demo.html
+
+#style sheets
+css/bootstrap-responsive.css
+css/bootstrap.css
+css/leaflet.css
+
+#style sheet images
+css/images/layers-2x.png
+css/images/layers.png
+img/glyphicons-halflings-white.png
+img/glyphicons-halflings.png
+
+#javascript files
+http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js
+js/vendor/bootstrap.min.js
+js/vendor/lru.js
+js/vendor/localforage.js
+http://lsdjs.info/js/crossforage.js
+http://lsdjs.info/js/LSD.js
+js/leaflet-src.js
+http://oauth.googlecode.com/svn/code/javascript/oauth.js
+http://oauth.googlecode.com/svn/code/javascript/sha1.js
+js/yelp.js
+js/map_demo.js
+
+NETWORK:
+*
