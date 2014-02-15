@@ -16,8 +16,10 @@
   'use strict';
 
   var shards;
-  var shardStores = {};
+  var shardStores;
   var shardLengths = {};
+
+  var cacheLimit = 4;
 
   // shardingFunction returns shard id for given key
   var shardingFunction = function (key) {
@@ -35,16 +37,17 @@
   };
 
   var getShardStore = function (shardId) {
-    var shardStore = shardStores[shardId];
+    var shardStore = shardStores.get(shardId, false);
     if (!shardStore) {
-      shardStore = shardStores[shardId] = new CrossDomainStorage(shardIdToDomain(shardId), '/LSD.html');
+      shardStore = new CrossDomainStorage(shardIdToDomain(shardId), '/LSD.html');
+      shardStores.put(shardId, shardStore);
     }
     return shardStore;
   };
 
   var clear = function (shardId) {
     getShardStore(shardId).clear(function () {
-      delete shardStores[shardId];
+      shardStores.remove(shardId).unload();
       delete shardLengths[shardId];
       delete shards[shardId];
       localforage.removeItem(shardId);
@@ -59,6 +62,16 @@
     // }
     init: function (options, callback) {
       var options = options || {};
+
+      // initialize shard store cache
+      cacheLimit = options.cacheLimit || cacheLimit;
+      shardStores = new LRUCache(cacheLimit);
+      shardStores.shift = function() {
+        var entry = LRUCache.prototype.shift.call(this);
+        entry.value.unload();
+        return entry;
+      };
+
       shardingFunction = options.shardingFunction;
       shardIdToDomain = options.shardIdToDomain || shardIdToDomain;
       localforage.getItem('__LSD_SHARDS__', function (value) {
@@ -73,6 +86,15 @@
     },
     getShardLengths: function () {
       return shardLengths;
+    },
+    getShardStores: function () {
+      return shardStores;
+    },
+    getCacheLimit: function () {
+      return cacheLimit;
+    },
+    setCacheLimit: function (limit) {
+      cacheLimit = limit;
     },
     getShardStore: getShardStore,
     getItem: function (key, callback) {
