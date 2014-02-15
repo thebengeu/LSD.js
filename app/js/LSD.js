@@ -34,6 +34,24 @@
     return domainPrefix + shardId + domainSuffix;
   };
 
+  var getShardStore = function (shardId) {
+    var shardStore = shardStores[shardId];
+    if (!shardStore) {
+      shardStore = shardStores[shardId] = new CrossDomainStorage(shardIdToDomain(shardId), '/LSD.html');
+    }
+    return shardStore;
+  };
+
+  var clear = function (shardId) {
+    getShardStore(shardId).clear(function () {
+      delete shardStores[shardId];
+      delete shardLengths[shardId];
+      delete shards[shardId];
+      localforage.removeItem(shardId);
+      localforage.setItem('__LSD_SHARDS__', shards);
+    });
+  };
+
   return {
     // options: {
     //   shardingFunction: [Function] (Required)
@@ -56,15 +74,12 @@
     getShardLengths: function () {
       return shardLengths;
     },
+    getShardStore: getShardStore,
     getItem: function (key, callback) {
       var shardId = shardingFunction(key);
       var shard = shards[shardId];
       if (shard) {
-        var shardStore = shardStores[shardId];
-        if (!shardStore) {
-          shardStore = shardStores[shardId] = new CrossDomainStorage(shardIdToDomain(shardId), '/LSD.html');
-        }
-        shardStore.getItem(key, callback);
+        getShardStore(shardId).getItem(key, callback);
       } else if (callback) {
         callback(null);
       }
@@ -79,11 +94,7 @@
         localforage.setItem(shardId, 0);
         shardLengths[shardId] = 0;
       }
-      var shardStore = shardStores[shardId];
-      if (!shardStore) {
-        shardStore = shardStores[shardId] = new CrossDomainStorage(shardIdToDomain(shardId), '/LSD.html');
-      }
-      shardStore.setItem(key, value, function (newShardLength) {
+      getShardStore(shardId).setItem(key, value, function (newShardLength) {
         shardLengths[shardId] = newShardLength;
         localforage.setItem(shardId, newShardLength);
         if (callback) {
@@ -94,6 +105,9 @@
     removeItem: function (key, callback) {
     },
     clear: function () {
+      for (var shardId in shards) {
+        clear(shardId);
+      }
     }
   };
 }));
