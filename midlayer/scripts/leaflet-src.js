@@ -4,9 +4,7 @@
  (c) 2010-2011, CloudMade
 */
 
-window.localforage || document.write('<script src="scripts/localforage.js"></script>');
-
-(function (window, document, lf, undefined) {
+(function (window, document, localforage, undefined) {
 var oldL = window.L,
     L = {};
 
@@ -2426,7 +2424,6 @@ L.CRS.EPSG3395 = L.extend({}, L.CRS, {
 /*
  * L.TileLayer is used for standard xyz-numbered tile layers.
  */
-
 L.TileLayer = L.Class.extend({
 	includes: L.Mixin.Events,
 
@@ -2886,13 +2883,54 @@ L.TileLayer = L.Class.extend({
 
 	// image-specific code (override to implement e.g. Canvas or SVG tile layer)
 
-	getTileUrl: function (tilePoint) {
-		return L.Util.template(this._url, L.extend({
+	getTileUrl: function (tilePoint, callback) {
+		var url = L.Util.template(this._url, L.extend({
 			s: this._getSubdomain(tilePoint),
 			z: tilePoint.z,
 			x: tilePoint.x,
 			y: tilePoint.y
 		}, this.options));
+
+		localforage.getItem(url, (function(data) {
+			if (data) {
+				callback(data);
+			} else {
+				this._downloadTileBlob(url, (function(data) {
+					localforage.setItem(url, this._arrayBufferToBase64(data), (function() {
+						callback(this._arrayBufferToBase64(data));
+					}).bind(this));
+				}).bind(this));
+			}
+		}).bind(this));
+	},
+
+	_arrayBufferToBase64: function (buffer) {
+		var binary = '';
+	    var bytes = new Uint8Array( buffer );
+	    var len = bytes.byteLength;
+	    for (var i = 0; i < len; i++) {
+	        binary += String.fromCharCode( bytes[ i ] );
+	    }
+	    return window.btoa( binary );
+	},
+
+	_downloadTileBlob: function (url, callback) {
+	    var oReq = new XMLHttpRequest();
+	    oReq.addEventListener("load", function () {
+	      callback(oReq.response);
+	    }, false);
+	    oReq.addEventListener("error", function (oEvent) {
+	      console.log(oEvent);
+	      callback();
+	    }, false);
+	    oReq.addEventListener("abort", function (oEvent) {
+	      console.log(oEvent);
+	      callback();
+	    }, false);
+
+	    oReq.open('GET', url, true);
+	    oReq.responseType = 'arraybuffer';
+	    oReq.send(null);
 	},
 
 	_getWrapTileNum: function () {
@@ -2958,12 +2996,13 @@ L.TileLayer = L.Class.extend({
 		tile.onerror = this._tileOnError;
 
 		this._adjustTilePoint(tilePoint);
-		tile.src     = this.getTileUrl(tilePoint);
-
-		this.fire('tileloadstart', {
-			tile: tile,
-			url: tile.src
-		});
+		this.getTileUrl(tilePoint, (function(data) {
+			tile.src = "data:image/png;base64," + data;
+			this.fire('tileloadstart', {
+				tile: tile,
+				url:  tile.src
+			});
+		}).bind(this));
 	},
 
 	_tileLoaded: function () {
@@ -3090,7 +3129,6 @@ L.TileLayer.WMS = L.TileLayer.extend({
 		        [nw.x, se.y, se.x, nw.y].join(','),
 
 		    url = L.Util.template(this._url, {s: this._getSubdomain(tilePoint)});
-		    
 		return url + L.Util.getParamString(this.wmsParams, url, true) + '&BBOX=' + bbox;
 	},
 
