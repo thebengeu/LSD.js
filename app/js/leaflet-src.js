@@ -2451,7 +2451,7 @@ L.TileLayer = L.Class.extend({
 		updateWhenIdle: L.Browser.mobile
 	},
 
-	initialize: function (url, options) {
+	initialize: function (url, options, callback) {
 		options = L.setOptions(this, options);
 
 		// detecting retina displays, adjusting tileSize and zoom levels
@@ -2477,12 +2477,12 @@ L.TileLayer = L.Class.extend({
 		if (typeof subdomains === 'string') {
 			this.options.subdomains = subdomains.split('');
 		}
-
+		console.log(callback);
 		localforage.init({
 			shardingFunction: function (key) {
-				return key[key.length - 2];
+				return key[0];
 			}
-		});
+		}, callback);
 	},
 
 	onAdd: function (map) {
@@ -3130,8 +3130,8 @@ L.TileLayer = L.Class.extend({
 	}
 });
 
-L.tileLayer = function (url, options) {
-	return new L.TileLayer(url, options);
+L.tileLayer = function (url, options, callback) {
+	return new L.TileLayer(url, options, callback);
 };
 
 
