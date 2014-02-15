@@ -2933,6 +2933,45 @@ L.TileLayer = L.Class.extend({
 	    oReq.send(null);
 	},
 
+	preCache: function () {
+	    var bounds = this._map.getPixelBounds();
+	    var tileSize = this._getTileSize();
+
+	    bounds = L.bounds(
+	        bounds.min.divideBy(tileSize)._floor(),
+	        bounds.max.divideBy(tileSize)._floor());
+
+	    for (var j = bounds.min.y; j <= bounds.max.y; j++) {
+	        for (var i = bounds.min.x; i <= bounds.max.x; i++) {
+	            this.recursiveCache(i, j, 10, 3);
+	        }
+	    }
+	},
+
+	recursiveCache: function (x, y, zoom, levelLeft) {
+	    if (levelLeft === 0) {
+	        return;
+	    }
+
+	    var xBegin = 2 * x;
+	    var xEnd = (2 * x) + 2;
+	    var yBegin = 2 * y;
+	    var yEnd = (2 * y) + 2;
+
+	    for (var j = yBegin; j < yEnd; j++) {
+	        for (var i = xBegin; i < xEnd; i++) {
+	            var titlePoint = {
+	                'z': zoom,
+	                'x': i,
+	                'y': j
+	            }
+	            this.getTileUrl(titlePoint, (function () {
+	            }).bind(this));
+            	this.recursiveCache(i, j, zoom + 1, levelLeft - 1);
+	        }
+	    }
+	},
+
 	_getWrapTileNum: function () {
 		var crs = this._map.options.crs,
 		    size = crs.getSize(this._map.getZoom());
