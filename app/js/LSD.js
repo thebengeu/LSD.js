@@ -39,7 +39,7 @@
   var getShardStore = function (shardId) {
     var shardStore = shardStores.get(shardId, false);
     if (!shardStore) {
-      shardStore = new CrossDomainStorage(shardIdToDomain(shardId), '/LSD.html');
+      shardStore = new crossforage(shardIdToDomain(shardId), '/crossforage.html');
       shardStores.put(shardId, shardStore);
     }
     return shardStore;
