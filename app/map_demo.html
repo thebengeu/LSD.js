@@ -36,7 +36,7 @@
             <ul class="nav">
               <li class="active"><a href="#">Demo</a></li>
               <li><a href="#" class="cache-me">Cache Me!</a></li>
-              <li><a href="#myModal" data-toggle="modal">Info</a></li>
+              <li><a href="#myModal" data-toggle="modal" onClick="test">Info</a></li>
             </ul>
           </div><!--/.nav-collapse -->
 
@@ -53,8 +53,11 @@
       </div>
       <div class="modal-body">
         <script>
-          var ids = LSD.getShardLengths();
-          console.log(ids);
+            function test(e) {
+              var ids = LSD.getShardLengths();
+              console.log(ids);
+              alert("Cached!");
+            }
         </Script>
       </div>
       <div class="modal-footer">
