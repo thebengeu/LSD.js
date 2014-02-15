@@ -14,6 +14,8 @@ map_demo.html
 css/bootstrap-responsive.css
 css/bootstrap.css
 css/leaflet.css
+css/offline-theme-chrome.css
+css/offline-language-english.css
 
 #style sheet images
 css/images/layers-2x.png
@@ -33,6 +35,7 @@ http://oauth.googlecode.com/svn/code/javascript/oauth.js
 http://oauth.googlecode.com/svn/code/javascript/sha1.js
 js/yelp.js
 js/map_demo.js
+js/vendor/offline.min.js
 
 NETWORK:
 *
