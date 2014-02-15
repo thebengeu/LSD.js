@@ -5,7 +5,7 @@ Yelp = function () {
     var accessor = {};
     var TRUNCATE = 2;
     // Sets app's credentials
-    setCredentials = function(ck, cs, at, ats) {
+    var setCredentials = function(ck, cs, at, ats) {
         auth = {
             consumerKey: ck,
             consumerSecret: cs,
@@ -23,7 +23,7 @@ Yelp = function () {
 
 
     // Private function to Query yelp for stuffz
-    sync = function(la, lo, term, callBack) {
+    var sync = function(la, lo, term, callBack) {
         var parameters = [];
         parameters.push(['callback', 'cb']);
         parameters.push(['oauth_consumer_key', auth.consumerKey]);
@@ -83,7 +83,7 @@ Yelp = function () {
     };
 
     // User Query
-    query = function(la, lo, term, callBack) {
+    var query = function(la, lo, term, callBack) {
         localforage.getItem(la.toFixed(TRUNCATE).toString() + ',' + lo.toFixed(TRUNCATE).toString(), 
                 function(data){
                     if (!data){
