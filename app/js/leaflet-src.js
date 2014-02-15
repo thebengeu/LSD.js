@@ -2890,7 +2890,7 @@ L.TileLayer = L.Class.extend({
 			x: tilePoint.x,
 			y: tilePoint.y
 		}, this.options));
-
+		
 		localforage.getItem(url, (function(data) {
 			if (data) {
 				callback(data);
@@ -2953,6 +2953,7 @@ L.TileLayer = L.Class.extend({
 
 	        	var n = Math.PI-2*Math.PI*j/Math.pow(2,z);
   				var x = (180/Math.PI*Math.atan(0.5*(Math.exp(n)-Math.exp(-n))));
+  				coords.push({'lat': x, 'lon': y});
 	        }
 	    }
 
@@ -2962,6 +2963,7 @@ L.TileLayer = L.Class.extend({
 	preCache: function () {
 	    var bounds = this._map.getPixelBounds();
 	    var tileSize = this._getTileSize();
+	    var zoom = this._map.getZoom();
 
 	    bounds = L.bounds(
 	        bounds.min.divideBy(tileSize)._floor(),
@@ -2969,7 +2971,7 @@ L.TileLayer = L.Class.extend({
 
 	    for (var j = bounds.min.y; j <= bounds.max.y; j++) {
 	        for (var i = bounds.min.x; i <= bounds.max.x; i++) {
-	            this.recursiveCache(i, j, 10, 3);
+	            this.recursiveCache(i, j, zoom + 1, 3);
 	        }
 	    }
 	},
@@ -2992,8 +2994,8 @@ L.TileLayer = L.Class.extend({
 	                'y': j
 	            }
 	            this.getTileUrl(titlePoint, (function () {
+            		this.recursiveCache(i, j, zoom + 1, levelLeft - 1);
 	            }).bind(this));
-            	this.recursiveCache(i, j, zoom + 1, levelLeft - 1);
 	        }
 	    }
 	},
