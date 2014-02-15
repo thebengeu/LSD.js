@@ -10,12 +10,12 @@
     define(factory);
   } else {
     // Browser globals
-    root.CrossDomainStorage = factory();
+    root.crossforage = factory();
   }
 }(this, function () {
   'use strict';
 
-  function CrossDomainStorage(origin, path) {
+  function crossforage(origin, path) {
     this.origin = origin;
     this.path = path;
     this._iframe = null;
@@ -25,9 +25,9 @@
     this._id = 0;
   }
 
-  CrossDomainStorage.prototype = {
+  crossforage.prototype = {
     //restore constructor
-    constructor: CrossDomainStorage,
+    constructor: crossforage,
 
     //public interface methods
     load: function () {
@@ -160,5 +160,5 @@
     }
   };
 
-  return CrossDomainStorage;
+  return crossforage;
 }));
