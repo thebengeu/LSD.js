@@ -10,6 +10,7 @@ for (var i = 0; i < 100; i++) {
     storages.push(c);
     c.setItem('index', i, function () {
       c.getItem('index', function (value) {
+        document.body.innerHTML += value + '<br>';
         console.log(value);
       });
     });
