@@ -95,7 +95,7 @@ Yelp = function () {
                 }
                 );
         console.log(la.toFixed(TRUNCATE).toString() + ',' + lo.toFixed(TRUNCATE).toString());
-    }
+    };
 
     return {
         "setCredentials": setCredentials,

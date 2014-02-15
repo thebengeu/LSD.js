@@ -76,14 +76,13 @@
 
         function doSomething(e) {
           var search = document.getElementById('search').value;
-          console.log
         }
 
-        var marker = new Array();
+        var marker = [];
         function onMapClick(e) {
 
           if(marker.length != 0) {
-            for (i = 0; i < marker.length; i++) {
+            for (var i = 0; i < marker.length; i++) {
               map.removeLayer(marker[i]);
             }
           }
