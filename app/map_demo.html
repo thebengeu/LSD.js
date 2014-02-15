@@ -53,11 +53,7 @@
       </div>
       <div class="modal-body">
         <script>
-            function test(e) {
-              var ids = LSD.getShardLengths();
-              console.log(ids);
-              alert("Cached!");
-            }
+            $('#myModal').on('show', function(){console.log(LSD.getShardLengths());})
         </script>
       </div>
       <div class="modal-footer">
