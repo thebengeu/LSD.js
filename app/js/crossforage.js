@@ -10,12 +10,12 @@
     define(factory);
   } else {
     // Browser globals
-    root.CrossDomainStorage = factory();
+    root.crossforage = factory();
   }
 }(this, function () {
   'use strict';
 
-  function CrossDomainStorage(origin, path) {
+  function crossforage(origin, path) {
     this.origin = origin;
     this.path = path;
     this._iframe = null;
@@ -25,9 +25,9 @@
     this._id = 0;
   }
 
-  CrossDomainStorage.prototype = {
+  crossforage.prototype = {
     //restore constructor
-    constructor: CrossDomainStorage,
+    constructor: crossforage,
 
     //public interface methods
     load: function () {
@@ -64,7 +64,6 @@
     unload: function () {
       if (this._iframe) {
         document.body.removeChild(this._iframe);
-        console.log(this._iframe);
       }
     },
 
@@ -72,28 +71,47 @@
       this._queueRequest({
         method: 'getItem',
         key: key
-      }, callback);
+      }, function (data) {
+        if (data.value) {
+          var result = JSON.parse(data.value);
+        }
+
+        callback(result);
+      });
     },
 
     setItem: function (key, value, callback) {
+      try {
+        value = JSON.stringify(value);
+      } catch (e) {
+        console.error("Couldn't convert value into a JSON string: ", value);
+        callback(-1);
+      }
+
       this._queueRequest({
         method: 'setItem',
         key: key,
         value: value
-      }, callback);
+      }, function (data) {
+        callback(data.length);
+      });
     },
 
     removeItem: function (key, callback) {
       this._queueRequest({
         method: 'removeItem',
         key: key
-      }, callback);
+      }, function (data) {
+        callback(data.length);
+      });
     },
 
     clear: function (callback) {
       this._queueRequest({
         method: 'clear'
-      }, callback);
+      }, function () {
+        callback();
+      });
     },
 
     //private methods
@@ -142,5 +160,5 @@
     }
   };
 
-  return CrossDomainStorage;
+  return crossforage;
 }));

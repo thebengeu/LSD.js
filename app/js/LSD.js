@@ -16,7 +16,10 @@
   'use strict';
 
   var shards;
-  var shardStores = {};
+  var shardStores;
+  var shardLengths = {};
+
+  var cacheLimit = 4;
 
   // shardingFunction returns shard id for given key
   var shardingFunction = function (key) {
@@ -33,6 +36,25 @@
     return domainPrefix + shardId + domainSuffix;
   };
 
+  var getShardStore = function (shardId) {
+    var shardStore = shardStores.get(shardId, false);
+    if (!shardStore) {
+      shardStore = new crossforage(shardIdToDomain(shardId), '/crossforage.html');
+      shardStores.put(shardId, shardStore);
+    }
+    return shardStore;
+  };
+
+  var clear = function (shardId) {
+    getShardStore(shardId).clear(function () {
+      shardStores.remove(shardId).unload();
+      delete shardLengths[shardId];
+      delete shards[shardId];
+      localforage.removeItem(shardId);
+      localforage.setItem('__LSD_SHARDS__', shards);
+    });
+  };
+
   return {
     // options: {
     //   shardingFunction: [Function] (Required)
@@ -40,9 +62,19 @@
     // }
     init: function (options, callback) {
       var options = options || {};
+
+      // initialize shard store cache
+      cacheLimit = options.cacheLimit || cacheLimit;
+      shardStores = new LRUCache(cacheLimit);
+      shardStores.shift = function() {
+        var entry = LRUCache.prototype.shift.call(this);
+        entry.value.unload();
+        return entry;
+      };
+
       shardingFunction = options.shardingFunction;
       shardIdToDomain = options.shardIdToDomain || shardIdToDomain;
-      localforage.getItem('shards', function (value) {
+      localforage.getItem('__LSD_SHARDS__', function (value) {
         shards = value || {};
         if (callback) {
           callback();
@@ -52,42 +84,65 @@
     getShards: function () {
       return shards;
     },
+    getShardLengths: function () {
+      return shardLengths;
+    },
+    getShardStores: function () {
+      return shardStores;
+    },
+    getCacheLimit: function () {
+      return cacheLimit;
+    },
+    setCacheLimit: function (limit) {
+      cacheLimit = limit;
+    },
+    getShardStore: getShardStore,
     getItem: function (key, callback) {
       var shardId = shardingFunction(key);
       var shard = shards[shardId];
       if (shard) {
-        var shardStore = shardStores[shardId];
-        if (!shardStore) {
-          shardStore = shardStores[shardId] = new CrossDomainStorage(shardIdToDomain(shardId), '/LSD.html')
-        }
-        shardStore.getItem(key, callback);
+        getShardStore(shardId).getItem(key, callback);
       } else if (callback) {
         callback(null);
       }
     },
     setItem: function (key, value, callback) {
       var shardId = shardingFunction(key);
-      var shard = shards[shardId];
-      if (!shard) {
-        shard = shards[shardId] = {
-          length: 0
-        };
+      if (!shards[shardId]) {
+        shards[shardId] = true;
+        localforage.setItem('__LSD_SHARDS__', shards);
+
+        // store length
+        localforage.setItem(shardId, 0);
+        shardLengths[shardId] = 0;
       }
-      var shardStore = shardStores[shardId];
-      if (!shardStore) {
-        shardStore = shardStores[shardId] = new CrossDomainStorage(shardIdToDomain(shardId), '/LSD.html')
-      }
-      shardStore.setItem(key, value, function () {
-        shard.length += value.length;
-        localforage.setItem('shards', shards);
+      getShardStore(shardId).setItem(key, value, function (newShardLength) {
+        shardLengths[shardId] = newShardLength;
+        localforage.setItem(shardId, newShardLength);
         if (callback) {
           callback();
         }
       });
     },
     removeItem: function (key, callback) {
+      var shardId = shardingFunction(key);
+      var shard = shards[shardId];
+      if (shard) {
+        getShardStore(shardId).removeItem(key, function (newShardLength) {
+          shardLengths[shardId] = newShardLength;
+          localforage.setItem(shardId, newShardLength);
+          if (callback) {
+            callback();
+          }
+        });
+      } else if (callback) {
+        callback();
+      }
     },
     clear: function () {
+      for (var shardId in shards) {
+        clear(shardId);
+      }
     }
   };
 }));
