@@ -90,8 +90,8 @@
       this._queueRequest({
         method: 'removeItem',
         key: key
-      }, function () {
-        callback();
+      }, function (data) {
+        callback(data.length);
       });
     },
 

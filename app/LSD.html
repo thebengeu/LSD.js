@@ -32,8 +32,13 @@
           });
           break;
         case 'removeItem':
-          localforage.removeItem(data.key, function () {
-            event.source.postMessage(JSON.stringify({id: data.id}), event.origin);
+          localforage.getItem(data.key, function (originalValue) {
+            localforage.removeItem(data.key, function () {
+              if (originalValue) {
+                length -= originalValue.length;
+              }
+              event.source.postMessage(JSON.stringify({id: data.id, length: length}), event.origin);
+            });
           });
           break;
         case 'clear':

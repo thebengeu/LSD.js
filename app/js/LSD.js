@@ -103,6 +103,19 @@
       });
     },
     removeItem: function (key, callback) {
+      var shardId = shardingFunction(key);
+      var shard = shards[shardId];
+      if (shard) {
+        getShardStore(shardId).removeItem(key, function (newShardLength) {
+          shardLengths[shardId] = newShardLength;
+          localforage.setItem(shardId, newShardLength);
+          if (callback) {
+            callback();
+          }
+        });
+      } else if (callback) {
+        callback();
+      }
     },
     clear: function () {
       for (var shardId in shards) {
