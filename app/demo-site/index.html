@@ -39,7 +39,7 @@
           <div class="nav-collapse collapse">
             <ul class="nav">
               <li class="active"><a href="#">Demo</a></li>
-              <li><a href="#about" onClick="cacheMap()">Cache Me!</a></li>
+              <li><a href="#about" class="cache-me">Cache Me!</a></li>
             </ul>
           </div><!--/.nav-collapse -->
 
@@ -61,83 +61,85 @@
     <script src="js/leaflet-src.js"></script>
     <script type="text/javascript" src="http://oauth.googlecode.com/svn/code/javascript/oauth.js"></script>
     <script type="text/javascript" src="http://oauth.googlecode.com/svn/code/javascript/sha1.js"></script>
-    <script src="yelp_js/dist/localForage.js"></script>
     <script src="yelp_js/yelp.js"></script>
     <script src="yelp_js/main.js"></script>
 
     <script>
-    var map = L.map('map').setView([1.28251, 103.85104], 10);
+      (function () {
+        var map = L.map('map').setView([1.28251, 103.85104], 10);
 
-    var hello = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 18,
-      attribution: 'Map data &copy; 2013 OpenStreetMap contributors'
-    });
-    hello.addTo(map);
+        var hello = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+          maxZoom: 18,
+          attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        });
+        hello.addTo(map);
 
-    function doSomething(e) {
-      var search = document.getElementById('search').value;
-      console.log
-    }
-
-    var marker = new Array();
-    function onMapClick(e) {
-
-      if(marker.length != 0) {
-        for (i = 0; i < marker.length; i++) {
-          map.removeLayer(marker[i]);
+        function doSomething(e) {
+          var search = document.getElementById('search').value;
+          console.log
         }
-      }
 
-      //Extend the Default marker class
-      var RedIcon = L.Icon.Default.extend({
-          options: {
-                iconUrl: 'js/images/marker-icon-red.png'
+        var marker = new Array();
+        function onMapClick(e) {
+
+          if(marker.length != 0) {
+            for (i = 0; i < marker.length; i++) {
+              map.removeLayer(marker[i]);
+            }
           }
-      });
-      var redIcon = new RedIcon();
 
-      var tmpMarker = new L.marker(e.latlng, {icon: redIcon});
-      tmpMarker.bindPopup("You clicked the map at " + e.latlng.toString());
-      marker.push(tmpMarker);
-      map.addLayer(tmpMarker);
+          //Extend the Default marker class
+          var RedIcon = L.Icon.Default.extend({
+            options: {
+              iconUrl: 'js/images/marker-icon-red.png'
+            }
+          });
+          var redIcon = new RedIcon();
 
-      //map.removeLayer(marker);
-      //marker = new L.marker(e.latlng);
-      //map.addLayer(marker);
-      //marker.bindPopup("You clicked the map at " + e.latlng.toString());
-      //marker.openPopup();
-
-      //L.marker(e.latlng).addTo(map)
-      //.bindPopup("You clicked the map at " + e.latlng.toString()).openPopup();
-
-      Yelp.setCredentials(
-        "sy_dqaaRlT6u_-Ilez-qyA",
-        "wwZjPzhHV1g5lj8TCB7daluc1l8",
-        "xk3agjfaF7pttsF-XmbVT9PjodN5fXiO",
-        "3Ejttk8-u56maYxZ3aP02ebMuWs"
-      );
-
-      Yelp.query(e.latlng['lat'] , e.latlng['lng'], 'food', getNearby);
-      //alert(e.latlng['lat'] + ',' + e.latlng['lng']);
-      function getNearby(data){
-        for (var i in data['businesses']){
-          var tmpLat = data['businesses'][i]['location']['coordinate']['latitude'];
-          var tmpLong = data['businesses'][i]['location']['coordinate']['longitude'];
-          var tmpMarker = new L.marker([tmpLat, tmpLong]);
-          tmpMarker.bindPopup(data['businesses'][i]['name']);
+          var tmpMarker = new L.marker(e.latlng, {icon: redIcon});
+          tmpMarker.bindPopup("You clicked the map at " + e.latlng.toString());
           marker.push(tmpMarker);
           map.addLayer(tmpMarker);
-       }
-      }
-    } //End of onMapClick()
 
-    function cacheMap(e) {
-      hello.preCache();
-      alert("Cached!");
-    }
+          //map.removeLayer(marker);
+          //marker = new L.marker(e.latlng);
+          //map.addLayer(marker);
+          //marker.bindPopup("You clicked the map at " + e.latlng.toString());
+          //marker.openPopup();
 
-    map.on('click', onMapClick);
+          //L.marker(e.latlng).addTo(map)
+          //.bindPopup("You clicked the map at " + e.latlng.toString()).openPopup();
 
+          Yelp.setCredentials(
+              "sy_dqaaRlT6u_-Ilez-qyA",
+              "wwZjPzhHV1g5lj8TCB7daluc1l8",
+              "xk3agjfaF7pttsF-XmbVT9PjodN5fXiO",
+              "3Ejttk8-u56maYxZ3aP02ebMuWs"
+          );
+
+          Yelp.query(e.latlng['lat'] , e.latlng['lng'], 'food', getNearby);
+          //alert(e.latlng['lat'] + ',' + e.latlng['lng']);
+          function getNearby(data){
+            for (var i in data['businesses']){
+              var tmpLat = data['businesses'][i]['location']['coordinate']['latitude'];
+              var tmpLong = data['businesses'][i]['location']['coordinate']['longitude'];
+              var tmpMarker = new L.marker([tmpLat, tmpLong]);
+              tmpMarker.bindPopup(data['businesses'][i]['name']);
+              marker.push(tmpMarker);
+              map.addLayer(tmpMarker);
+            }
+          }
+        } //End of onMapClick()
+
+        function cacheMap(e) {
+          hello.preCache();
+          alert("Cached!");
+        }
+
+        $('.cache-me').click(cacheMap);
+
+        map.on('click', onMapClick);
+      })();
   </script>
 
 
