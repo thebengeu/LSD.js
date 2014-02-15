@@ -1,6 +1,6 @@
 CACHE MANIFEST
 
-#version 1.0 2-16-2014
+#version 1.1 2-16-2014
 
 CACHE:
 
@@ -16,6 +16,10 @@ css/images/layers-2x.png
 css/images/layers.png
 img/glyphicons-halflings-white.png
 img/glyphicons-halflings.png
+images/marker-icon.png
+images/marker-icon-2x.png
+images/marker-icon-red.png
+images/marker-shadow.png
 
 #javascript files
 http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js
