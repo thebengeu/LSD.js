@@ -60,12 +60,11 @@
     );
 
     Yelp.query(e.latlng['lat'] , e.latlng['lng'], 'food', getNearby);
-    //alert(e.latlng['lat'] + ',' + e.latlng['lng']);
     function getNearby(data){
       for (var i in data['businesses']){
         var tmpLat = data['businesses'][i]['location']['coordinate']['latitude'];
         var tmpLong = data['businesses'][i]['location']['coordinate']['longitude'];
-        var tmpMarker = new L.marker([tmpLat, tmpLong]);
+        var tmpMarker = new L.marker([tmpLat, tmpLong], {icon: blueIcon});
         tmpMarker.bindPopup(data['businesses'][i]['name']);
         marker.push(tmpMarker);
         map.addLayer(tmpMarker);
