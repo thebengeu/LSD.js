@@ -26,13 +26,11 @@
   }
 
   CrossDomainStorage.prototype = {
-
     //restore constructor
     constructor: CrossDomainStorage,
 
     //public interface methods
-
-    init: function () {
+    load: function () {
       var that = this;
       if (!this._iframe) {
         if (window.postMessage && window.JSON && window.localStorage) {
@@ -61,7 +59,13 @@
       }
 
       this._iframe.src = this.origin + this.path;
+    },
 
+    unload: function () {
+      if (this._iframe) {
+        document.body.removeChild(this._iframe);
+        console.log(this._iframe);
+      }
     },
 
     getItem: function (key, callback) {
@@ -109,7 +113,7 @@
       }
 
       if (!this._iframe) {
-        this.init();
+        this.load();
       }
     },
 
