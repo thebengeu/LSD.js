@@ -1,56 +1,81 @@
 <!DOCTYPE html>
-<html class="no-js">
-    <head>
-        <meta charset="utf-8">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="HandheldFriendly" content="True">
-        <meta name="MobileOptimized" content="320">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta http-equiv="cleartype" content="on">
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LSD.js</title>
+    
+    <link rel="stylesheet" type="text/css" href="http://documentup.com/stylesheets/screen.css">
+    
+    
 
-        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="img/touch/apple-touch-icon-144x144-precomposed.png">
-        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="img/touch/apple-touch-icon-114x114-precomposed.png">
-        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="img/touch/apple-touch-icon-72x72-precomposed.png">
-        <link rel="apple-touch-icon-precomposed" href="img/touch/apple-touch-icon-57x57-precomposed.png">
-        <link rel="shortcut icon" sizes="196x196" href="img/touch/touch-icon-196x196.png">
-        <link rel="shortcut icon" href="img/touch/apple-touch-icon.png">
-        <link rel="stylesheet" href="css/leaflet.css" />
+    
 
-        <!-- Tile icon for Win8 (144x144 + tile color) -->
-        <meta name="msapplication-TileImage" content="img/touch/apple-touch-icon-144x144-precomposed.png">
-        <meta name="msapplication-TileColor" content="#222222">
-        <div id="map" style="width:600px; height:600px"></div>
+    <!-- Typekit -->
+    
+      <script type="text/javascript">
+        (function() {
+          var config = {
+            kitId: 'hjp0pft',
+            scriptTimeout: 3000
+          };
+          var h=document.getElementsByTagName("html")[0];h.className+=" wf-loading";var t=setTimeout(function(){h.className=h.className.replace(/( |^)wf-loading( |$)/g,"");h.className+=" wf-inactive"},config.scriptTimeout);var tk=document.createElement("script");tk.src='//use.typekit.net/'+config.kitId+'.js';tk.type="text/javascript";tk.async="true";tk.onload=tk.onreadystatechange=function(){var a=this.readyState;if(a&&a!="complete"&&a!="loaded")return;clearTimeout(t);try{Typekit.load(config)}catch(b){}};var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(tk,s)
+        })();
+      </script>
+    
+  </head>
+  <body><div id="container">
+  <div id="nav">
+    
+      <div id="header">
+        <a href="#" id="logo">LSD.js</a>
+      </div>
+    
+    <ul id="sections">
+      
+        <li>
+          <a href="#dependencies">Dependencies</a>
+          
+        </li>
+      
+        <li>
+          <a href="#prior-work">Prior Work</a>
+          
+        </li>
+      
+    </ul>
+    
+    
+  </div>
+  <div id="content">
+    
+    <h1>LSD.js - Local Storage, Distributed</h1>
+<p>LSD.js is.. TODO Introduction</p>
+<h2 id='dependencies'>Dependencies</h2 id='dependencies'>
+<ul>
+<li>crossforage (Cross-domain localforage - written by us alongside LSD.js. Useful
+on its own if sharing just one domain&#39;s local storage, will be split into own
+repo when more mature.)</li>
+<li><a href="https://github.com/rsms/js-lru">js-lru</a></li>
+<li><a href="https://github.com/mozilla/localForage">localforage</a> (Currently using
+modified version until we&#39;re in a state to make proper pull requests.)</li>
+</ul>
+<h2 id='prior-work'>Prior Work</h2 id='prior-work'>
+<ul>
+<li><a href="http://www.nczonline.net/blog/2010/09/07/learning-from-xauth-cross-domain-localstorage/">Learning from XAuth: Cross-domain localStorage</a>
+by Nicholas C. Zakas. Explains how XAuth uses cross-domain messaging for
+read-only access to another domain&#39;s <code>localStorage</code>.</li>
+<li><a href="http://feross.org/fill-disk/">HTML5 Hard Disk Filler™ API</a> by
+<a href="http://feross.org/">Feross</a>. Abuses HTML5 <code>localStorage</code> to completely fill
+up Chrome, Safari, and IE users&#39; hard disks.</li>
+<li><a href="https://hacks.mozilla.org/2014/02/localforage-offline-storage-improved/">localforage</a>
+by Mozilla. Provides a simple asynchronous localStorage-like API, loading the
+best driver between <code>IndexedDB</code>, <code>WebSQL</code> and <code>localStorage</code>. We adopted their
+API to be able to serve as a drop-in replacement, just <code>s/localforage/LSD</code>.</li>
+</ul>
 
-        <!-- SEO: If mobile URL is different from desktop URL, add a canonical link to the desktop page -->
-        <!--
-        <link rel="canonical" href="http://www.example.com/" >
-        -->
-
-        <!-- Add to homescreen for Chrome on Android -->
-        <!--
-        <meta name="mobile-web-app-capable" content="yes">
-        -->
-
-        <!-- For iOS web apps. Delete if not needed. https://github.com/h5bp/mobile-boilerplate/issues/94 -->
-        <!--
-        <meta name="apple-mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-status-bar-style" content="black">
-        <meta name="apple-mobile-web-app-title" content="">
-        -->
-
-        <!-- This script prevents links from opening in Mobile Safari. https://gist.github.com/1042026 -->
-        <!--
-        <script>(function(a,b,c){if(c in b&&b[c]){var d,e=a.location,f=/^(a|html)$/i;a.addEventListener("click",function(a){d=a.target;while(!f.test(d.nodeName))d=d.parentNode;"href"in d&&(d.href.indexOf("http")||~d.href.indexOf(e.host))&&(a.preventDefault(),e.href=d.href)},!1)}})(document,window.navigator,"standalone")</script>
-        -->
-    </head>
-    <body>
-        <!-- Add your site or application content here -->
-        <script src="js/vendor/localforage.js"></script>
-        <script src="js/vendor/lru.js"></script>
-        <script src="js/crossforage.js"></script>
-        <script src="js/LSD.js"></script>
-        <script src="js/leaflet-src.js"></script>
-        <script src="js/main.js"></script>
-    </body>
+  </div>
+</div>
+</body>
 </html>

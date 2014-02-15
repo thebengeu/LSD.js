@@ -2,6 +2,8 @@
 
 LSD.js is.. TODO Introduction
 
+#### [Offline Map Cache Demo](http://lsdjs.info/map.html)
+
 ## Dependencies
 * crossforage (Cross-domain localforage - written by us alongside LSD.js. Useful
   on its own if sharing just one domain's local storage, will be split into own
