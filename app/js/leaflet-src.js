@@ -2480,7 +2480,7 @@ L.TileLayer = L.Class.extend({
 
 		localforage.init({
 			shardingFunction: function (key) {
-				return key;
+				return key[key.length - 2];
 			}
 		});
 	},
