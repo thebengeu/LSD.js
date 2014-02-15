@@ -1460,6 +1460,10 @@ requireModule('promise/polyfill').polyfill();
             });
         },
 
+        getDriver: function () {
+            return storageLibrary;
+        },
+
         _extend: function(libraryMethodsAndProperties) {
             for (var i in libraryMethodsAndProperties) {
                 if (libraryMethodsAndProperties.hasOwnProperty(i)) {
@@ -1475,7 +1479,19 @@ requireModule('promise/polyfill').polyfill();
     if (indexedDB) {
         storageLibrary = localForage.INDEXEDDB;
     } else if (window.openDatabase) { // WebSQL is available, so we'll use that.
-        storageLibrary = localForage.WEBSQL;
+        var DB_NAME = 'localforage';
+        var DB_SIZE = 5 * 1024 * 1024;
+        var DB_VERSION = '1.0';
+        var STORE_NAME = 'keyvaluepairs';
+
+        try {
+          window.openDatabase(DB_NAME, DB_VERSION, STORE_NAME, DB_SIZE);
+          storageLibrary = localForage.WEBSQL;
+        } catch (e) {
+          // Catch "SecurityError: DOM Exception 18: An attempt was made to break through the security policy of the user agent."
+          // when loaded in iframes.
+          storageLibrary = localForage.LOCALSTORAGE;
+        }
     } else { // If nothing else is available, we use localStorage.
         storageLibrary = localForage.LOCALSTORAGE;
     }
