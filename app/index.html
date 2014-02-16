@@ -40,15 +40,33 @@
         </li>
       
         <li>
+          <a href="#offline-map-cache-demo">Offline Map Cache Demo</a>
+          
+        </li>
+      
+        <li>
           <a href="#use-cases">Use Cases</a>
           
             <ul>
               
                 <li>
-                  <a href="#use-cases/online-offline-travel">Online / Offline Travel</a>
+                  <a href="#use-cases/online-offline-travel-apps">Online / Offline Travel Apps</a>
+                </li>
+              
+                <li>
+                  <a href="#use-cases/offline-github-repo-viewer-issue-triager">Offline Github Repo Viewer / Issue Triager</a>
+                </li>
+              
+                <li>
+                  <a href="#use-cases/wikipedia-subset-offline">Wikipedia (Subset) Offline</a>
                 </li>
               
             </ul>
+          
+        </li>
+      
+        <li>
+          <a href="#api-documentation">API Documentation</a>
           
         </li>
       
@@ -71,14 +89,22 @@
     <h1>LSD.js - Local Storage, Distributed</h1>
 <h2 id='introduction'>Introduction</h2 id='introduction'>
 <p>LSD.js is a JavaScript library that combines a bunch of browser hacks to give HTML5 apps the ability to have <strong>unbounded</strong> local storage, and the ability to <strong>share</strong> this storage between disparate apps even on different domains, and when offline.</p>
-<p>This is especially important for mobile devices, but strangely, even though most modern desktop browsers are capable of local storage up to a significant quota of the user&#39;s free disk space, local storage (WebSQL) is sadly limited to 50MB on iOS Safari, and 200MB on more recent versions of the Android browser.</p>
+<p>This is especially important for mobile devices, but strangely, even though most modern desktop browsers are capable of local storage up to a significant quota of the user&#39;s free disk space, local storage (WebSQL) is sadly limited to <strong>50MB</strong> on iOS Safari, and <strong>200MB</strong> on more recent versions of the Android browser.</p>
 <p>LSD.js works by sharding data intelligently across subdomains / domains, dynamically creating iframes and using cross-domain messaging to store and retrieve the data in each &quot;shard&quot;, based on a sharding function provided by the developer to hash keys, in order to exploit data locality specific to the needs of their application.</p>
 <p>Data locality is important, as LSD.js is capable of storing GBs of data, which would hardly fit in most mobile devices&#39; memory, especially an iframe, which is a full nested browsing context, is needed for each &quot;shard&quot;. Hence, for performance, it &quot;pages&quot; shards in and out as needed, loading and unloading iframes, and making sure data is garbage collected, based on a LRU cache of configurable size.</p>
-<p>For example, the library which caches map tiles in our demo app hashes keys based on locality in rectangular regions, and configures the LRU cache to have a limit of 4, since that represents the worst case scenario, when the region of interest is at the intersection of 4 of these rectangular regions.</p>
-<p>LSD.js leverages the best option between <code>IndexedDB</code>, <code>WebSQL</code> and <code>localStorage</code> depending on browser, and is built on top of <code>crossforage.js</code>, which we built for Cross-domain local storage in the context of a single domain.</p>
-<h2 id='use-cases'>Use Cases</h2 id='use-cases'>
-<h3 id='use-cases/online-offline-travel'>Online / Offline Travel</h3 id='use-cases/online-offline-travel'>
+<p>For example, the library which caches map tiles in our <a href="http://lsdjs.info/map_demo.html">demo app</a> hashes keys based on locality in rectangular regions, and configures the LRU cache to have a limit of 4, since that represents the worst case scenario, when the region of interest is at the intersection of 4 of these rectangular regions.</p>
+<p>LSD.js leverages the best option between <code>IndexedDB</code>, <code>WebSQL</code> and <code>localStorage</code> depending on browser, and is built on top of <code>crossforage.js</code>, which we built for cross-domain local storage in the context of a single domain.</p>
+<h2 id='offline-map-cache-demo'>Offline Map Cache Demo</h2 id='offline-map-cache-demo'>
 <h4><a href="http://lsdjs.info/map_demo.html">Offline Map Cache Demo</a></h4>
+<h2 id='use-cases'>Use Cases</h2 id='use-cases'>
+<h3 id='use-cases/online-offline-travel-apps'>Online / Offline Travel Apps</h3 id='use-cases/online-offline-travel-apps'>
+<p>This is a key use case, and the itch-to-scratch problem we originally wanted to solve. We created another two reusable libraries to showcase the possibilities with LSD.js - one is a drop-in replacement for the popular map library <a href="http://leafletjs.com/">Leaflet</a>, and the other is for Yelp.</p>
+<p>Both libraries transparently cache any downloaded map tiles / info in the unlimited shared local storage, and add API functions to precache selected regions.</p>
+<p>Map tiles and POI info are key things almost every travel app needs. Even if locally cached in a native app, this data is usually siloed and only available to that one app. With LSD.js, any developer who uses these libraries automatically take advantage of any data already downloaded offline, saving bandwidth and disk space.</p>
+<h3 id='use-cases/offline-github-repo-viewer-issue-triager'>Offline Github Repo Viewer / Issue Triager</h3 id='use-cases/offline-github-repo-viewer-issue-triager'>
+<h3 id='use-cases/wikipedia-subset-offline'>Wikipedia (Subset) Offline</h3 id='use-cases/wikipedia-subset-offline'>
+<h2 id='api-documentation'>API Documentation</h2 id='api-documentation'>
+<p>[To be filled when we&#39;ve had more sleep!]</p>
 <h2 id='dependencies'>Dependencies</h2 id='dependencies'>
 <ul>
 <li><code>crossforage.js</code> (Cross-domain localforage - written by us alongside LSD.js. May be split into own repo when more mature.)</li>
