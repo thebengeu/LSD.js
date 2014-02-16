@@ -77,13 +77,19 @@
       localforage.getItem('__LSD_SHARDS__', function (value) {
         shards = value || {};
         var counter = Object.keys(shards).length;
-        for (var shardId in shards) {
-          localforage.getItem(shardId, function (length) {
-            shardLengths[shardId] = length || 0;
-            if (!--counter && callback) {
-              callback();
-            }
-          });
+        if (counter) {
+          for (var shardId in shards) {
+            localforage.getItem(shardId, function (length) {
+              shardLengths[shardId] = length || 0;
+              if (!--counter && callback) {
+                callback();
+              }
+            });
+          }
+        } else {
+          if (callback) {
+            callback();
+          }
         }
       });
     },
