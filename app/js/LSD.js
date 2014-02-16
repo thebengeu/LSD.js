@@ -79,7 +79,7 @@
         var counter = Object.keys(shards).length;
         for (var shardId in shards) {
           localforage.getItem(shardId, function (length) {
-            shardLengths[shardId] = length;
+            shardLengths[shardId] = length || 0;
             if (!--counter && callback) {
               callback();
             }
