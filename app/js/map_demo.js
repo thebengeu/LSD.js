@@ -86,8 +86,6 @@
       hello.preCache();
     }
 
-    $('#myModal').on('show', function(){console.log(LSD.getShardLengths());});
-
     $('.cache-me').click(cacheMap);
 
     function getAllAround(e) {
@@ -194,8 +192,12 @@
       update();
     });
 
-    // $('#myModal').on('show', function(){
-    //   $('shards').append('<li></li>');
-    // });
+    $('#myModal').on('show', function(){
+      var s = LSD.getShardLengths();
+      for (var shard in s) {
+        console.log($('.shards'));
+        $('.shards').append('<li>'+ shard +'</li>');
+      }
+    });
   });
 })();
