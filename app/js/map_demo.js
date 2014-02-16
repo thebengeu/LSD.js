@@ -84,7 +84,6 @@
 
     function cacheMap(e) {
       hello.preCache();
-      alert("Cached!");
     }
 
     $('#myModal').on('show', function(){console.log(LSD.getShardLengths());});
