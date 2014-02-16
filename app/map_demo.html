@@ -53,7 +53,7 @@
       </div>
       <div class="modal-body">
         <script>
-            $('#myModal').on('show', function(){console.log(LSD.getShardLengths());})
+            //$('#myModal').on('show', function(){console.log(LSD.getShardLengths());})
         </script>
       </div>
       <div class="modal-footer">
@@ -64,13 +64,15 @@
     <div class="container">
 
       <div id="map" style="position: absolute; top: 20; left: 0; width: 100%; height: 100%;"></div>
-
+      <div id="graph" style="width:300px; height:200px; position: fixed; right:10px; bottom: 10px;"></div>
     </div> <!-- /container -->
     <!-- Le javascript
     ================================================== -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="js/vendor/offline.min.js"></script>
     <script src="js/vendor/bootstrap.min.js"></script>
+    <script src="js/vendor/jquery.flot.min.js"></script>
+    <script src="js/vendor/jquery.flot.time.min.js"></script>    
     <script src="js/vendor/lru.js"></script>
     <script src="js/vendor/localforage.js"></script>
     <script src="http://lsdjs.info/js/crossforage.js"></script>

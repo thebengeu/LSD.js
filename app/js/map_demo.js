@@ -100,4 +100,83 @@
 
   map.on('zoomend', getAllAround);
   map.on('click', onMapClick);
+
+  var data = [];
+  var totalPoints = 100;
+  var updateInterval = 1000;
+  var now = new Date().getTime();
+   
+  function GetData() {
+      data.shift(); //to remove first item of array
+   
+      while (data.length < totalPoints) {    
+          var y = Math.random() * 100;
+          var temp = [now += updateInterval, y]; //data format [x, y]
+   
+          data.push(temp);
+      }
+  }
+
+  $(document).ready(function () {
+    GetData();
+ 
+    dataset = [
+        { label: "Memory", data: data, color: "#00FF00" }
+    ];
+    var options = {
+      series: {
+        lines: {
+            show: true,
+            lineWidth: 1.2,
+            fill: true
+        }
+      },
+      xaxis: {
+        mode: "time",
+        tickSize: [1, "second"],
+        tickFormatter: function (v, axis) {
+            return "";
+        },
+        axisLabel: "Time",
+        axisLabelUseCanvas: true,
+        axisLabelFontSizePixels: 9,
+        axisLabelFontFamily: 'Verdana, Arial',
+        axisLabelPadding: 10
+      },
+      yaxis: {
+        min: 0,
+        //max: 100,                         
+        tickFormatter: function (v, axis) {
+            if (v % 10 == 0) {
+                return v;
+            } else {
+                return "";
+            }
+        },
+        axisLabel: "Total Memory",
+        axisLabelUseCanvas: true,
+        axisLabelFontSizePixels: 12,
+        axisLabelFontFamily: 'Verdana, Arial',
+        axisLabelPadding: 6
+      },
+      legend: {        
+        labelBoxBorderColor: "#fff"
+      },
+      grid: {                
+          backgroundColor: "#000000",
+          tickColor: "#008040"
+      }
+    };
+    $.plot($("#graph"), dataset, options);
+ 
+    function update() {
+        GetData();
+ 
+        $.plot($("#graph"), dataset, options)
+        setTimeout(update, updateInterval);
+    }
+ 
+      update();
+    });
+
 })();
