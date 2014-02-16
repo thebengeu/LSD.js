@@ -2972,7 +2972,7 @@ L.TileLayer = L.Class.extend({
 
 	    for (var j = bounds.min.y; j <= bounds.max.y; j++) {
 	        for (var i = bounds.min.x; i <= bounds.max.x; i++) {
-	            this.recursiveCache(i, j, zoom + 1, 5);
+	            this.recursiveCache(i, j, zoom + 1, 2);
 	        }
 	    }
 	},

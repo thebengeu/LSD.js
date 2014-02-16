@@ -167,7 +167,7 @@
               return "";
             }
           },
-          axisLabel: "Total Memory",
+          axisLabel: "Disk space",
           axisLabelUseCanvas: true,
           axisLabelFontSizePixels: 12,
           axisLabelFontFamily: 'Verdana, Arial',
