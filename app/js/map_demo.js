@@ -116,11 +116,10 @@
     var totalPoints = 100;
     var updateInterval = 1000;
     var now = new Date().getTime();
-    var current = 0;
 
     function GetData() {
       var newLength = LSD.getShardLengths();
-
+      var current = 0;
       for (i in newLength) {
         current += newLength[i];
       }
