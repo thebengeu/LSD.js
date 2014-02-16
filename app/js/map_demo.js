@@ -116,21 +116,21 @@
     var totalPoints = 100;
     var updateInterval = 1000;
     var now = new Date().getTime();
-    
-    function GetData() {
-        data.shift(); //to remove first item of array
-        
-        while (data.length < totalPoints) {    
-          var y = Math.random() * 100;
-            var temp = [now += updateInterval, y]; //data format [x, y]
-            
-            data.push(temp);
-          }
-        }
+    current = 0;
 
-        $(document).ready(function () {
+    function GetData() {
+      current += LSD.getShardLengths();
+      if (data.length >= 100) {
+        data.shift(); //to remove first item of array
+      }
+      var temp = [now += updateInterval, current]; //data format [x, y]
+
+            data.push(temp);
+    }
+
+      $(document).ready(function () {
           GetData();
-          
+
           dataset = [
           { label: "Memory", data: data, color: "#00FF00" }
           ];
@@ -179,14 +179,14 @@
         }
       };
       $.plot($("#graph"), dataset, options);
-      
+
       function update() {
         GetData();
-        
+
         $.plot($("#graph"), dataset, options)
         setTimeout(update, updateInterval);
       }
-      
+
       update();
     });
   });
