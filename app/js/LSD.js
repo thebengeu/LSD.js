@@ -76,8 +76,14 @@
       shardIdToDomain = options.shardIdToDomain || shardIdToDomain;
       localforage.getItem('__LSD_SHARDS__', function (value) {
         shards = value || {};
-        if (callback) {
-          callback();
+        var counter = Object.keys(shards).length;
+        for (var shardId in shards) {
+          localforage.getItem(shardId, function (length) {
+            shardLengths[shardId] = length;
+            if (!--counter && callback) {
+              callback();
+            }
+          });
         }
       });
     },
