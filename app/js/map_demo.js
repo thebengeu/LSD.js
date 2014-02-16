@@ -76,7 +76,8 @@
           var tmpLong = data['businesses'][i]['location']['coordinate']['longitude'];
           var tmpMarker = new L.marker([tmpLat, tmpLong], {icon: blueIcon});
           var bizName = data['businesses'][i]['name'];
-          tmpMarker.bindPopup(bizName);
+          var bizAddress = data['businesses'][i]['display_address'];
+          tmpMarker.bindPopup(bizName + bizAddress);
           marker.push(tmpMarker);
           map.addLayer(tmpMarker);
         }
