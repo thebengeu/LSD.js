@@ -137,7 +137,7 @@
           GetData();
 
           dataset = [
-          { label: "Memory", data: data, color: "#00FF00" }
+          { label: "Disk space", data: data, color: "#00FF00" }
           ];
           var options = {
             series: {
@@ -194,5 +194,9 @@
 
       update();
     });
+
+    // $('#myModal').on('show', function(){
+    //   $('shards').append('<li></li>');
+    // });
   });
 })();
