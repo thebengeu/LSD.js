@@ -2477,17 +2477,6 @@ L.TileLayer = L.Class.extend({
 		if (typeof subdomains === 'string') {
 			this.options.subdomains = subdomains.split('');
 		}
-
-		localforage.init({
-			shardingFunction: function (key) {
-				var keyArr = key.split('/');
-				var zoom = keyArr[3];
-				var x = parseInt(keyArr[4]);
-				var y = parseInt(keyArr[5].split('.')[0]);
-
-				return zoom + '-' + (parseInt(x / 50) * 50) + '-' + (parseInt(y / 50) * 50);
-			}
-		}, callback.bind(this));
 	},
 
 	onAdd: function (map) {
