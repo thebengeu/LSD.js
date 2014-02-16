@@ -116,10 +116,15 @@
     var totalPoints = 100;
     var updateInterval = 1000;
     var now = new Date().getTime();
-    current = 0;
+    var current = 0;
 
     function GetData() {
-      current += LSD.getShardLengths();
+      var newLength = LSD.getShardLengths();
+
+      for (i in newLength) {
+        current += newLength[i];
+      }
+
       if (data.length >= 100) {
         data.shift(); //to remove first item of array
       }
