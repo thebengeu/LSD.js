@@ -1,4 +1,5 @@
 # LSD.js - Local Storage, Distributed
+![LSD.js](http://i59.tinypic.com/30uzl8o.jpg)
 
 ## Introduction
 
