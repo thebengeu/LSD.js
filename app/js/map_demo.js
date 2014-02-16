@@ -113,30 +113,41 @@
 
 
     var data = [];
+    var active = [];
     var totalPoints = 100;
     var updateInterval = 1000;
     var now = new Date().getTime();
 
     function GetData() {
       var newLength = LSD.getShardLengths();
+      var shardKeys = LSD.getShardStores().keys();
       var current = 0;
+      var activeInUse = 0;
+      for (var i = 0; i < shardKeys.length; i++) {
+        activeInUse += newLength[shardKeys[i]];
+      }
+
       for (i in newLength) {
         current += newLength[i];
       }
 
       if (data.length >= 100) {
         data.shift(); //to remove first item of array
+        active.shift();
       }
       var temp = [now += updateInterval, current]; //data format [x, y]
+      var temp2 = [now, activeInUse];
 
             data.push(temp);
+            active.push[temp2];
     }
 
       $(document).ready(function () {
           GetData();
 
           dataset = [
-          { label: "Disk space", data: data, color: "#00FF00" }
+          { label: "Disk space", data: data, color: "#00FF00" },
+          { label: "Active", data: active, color: "#00FFFF" }
           ];
           var options = {
             series: {
