@@ -12,6 +12,8 @@ Data locality is important, as LSD.js is capable of storing GBs of data, which w
 
 For example, the library which caches map tiles in our demo app hashes keys based on locality in rectangular regions, and configures the LRU cache to have a limit of 4, since that represents the worst case scenario, when the region of interest is at the intersection of 4 of these rectangular regions.
 
+LSD.js leverages the best option between `IndexedDB`, `WebSQL` and `localStorage` depending on browser, and is built on top of `crossforage.js`, which we built for Cross-domain local storage in the context of a single domain.
+
 ## Use Cases
 
 ### Online / Offline Travel
@@ -19,9 +21,7 @@ For example, the library which caches map tiles in our demo app hashes keys base
 #### [Offline Map Cache Demo](http://lsdjs.info/map_demo.html)
 
 ## Dependencies
-* crossforage (Cross-domain localforage - written by us alongside LSD.js. Useful
-  on its own if sharing just one domain's local storage, will be split into own
-  repo when more mature.)
+* `crossforage.js` (Cross-domain localforage - written by us alongside LSD.js. May be split into own repo when more mature.)
 * [js-lru](https://github.com/rsms/js-lru)
 * [localforage](https://github.com/mozilla/localForage) (Currently using
 modified version until we're in a state to make proper pull requests.)

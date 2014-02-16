@@ -9,7 +9,7 @@
       return zoom + '-' + (parseInt(x / 50) * 50) + '-' + (parseInt(y / 50) * 50);
     }
   }, function () {
-    var map = L.map('map').setView([1.28251, 103.85104], 10);
+    var map = L.map('map').setView([37.4349, -122.1644], 11);
 
     var hello = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
       maxZoom: 18,
@@ -160,7 +160,7 @@
             },
             yaxis: {
               min: 0,
-          //max: 100,                         
+          //max: 100,
           tickFormatter: function (v, axis) {
             if (v % 10 == 0) {
               return v;
@@ -174,10 +174,10 @@
           axisLabelFontFamily: 'Verdana, Arial',
           axisLabelPadding: 6
         },
-        legend: {        
+        legend: {
           labelBoxBorderColor: "#fff"
         },
-        grid: {                
+        grid: {
           backgroundColor: "#000000",
           tickColor: "#008040"
         }
