@@ -1,5 +1,5 @@
 (function () {
-  var map = L.map('map').setView([1.28251, 103.85104], 10);
+  var map = L.map('map').setView([37.4349, -122.1644], 11);
 
   var hello = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
     maxZoom: 18,
