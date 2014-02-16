@@ -35,6 +35,24 @@
     <ul id="sections">
       
         <li>
+          <a href="#introduction">Introduction</a>
+          
+        </li>
+      
+        <li>
+          <a href="#use-cases">Use Cases</a>
+          
+            <ul>
+              
+                <li>
+                  <a href="#use-cases/online-offline-travel">Online / Offline Travel</a>
+                </li>
+              
+            </ul>
+          
+        </li>
+      
+        <li>
           <a href="#dependencies">Dependencies</a>
           
         </li>
@@ -51,7 +69,14 @@
   <div id="content">
     
     <h1>LSD.js - Local Storage, Distributed</h1>
-<p>LSD.js is.. TODO Introduction</p>
+<h2 id='introduction'>Introduction</h2 id='introduction'>
+<p>LSD.js is a JavaScript library that combines a bunch of browser hacks to give HTML5 apps the ability to have <strong>unbounded</strong> local storage, and the ability to <strong>share</strong> this storage between disparate apps even on different domains, and when offline.</p>
+<p>This is especially important for mobile devices, but strangely, even though most modern desktop browsers are capable of local storage up to a significant quota of the user&#39;s free disk space, local storage (WebSQL) is sadly limited to 50MB on iOS Safari, and 200MB on more recent versions of the Android browser.</p>
+<p>LSD.js works by sharding data intelligently across subdomains / domains, dynamically creating iframes and using cross-domain messaging to store and retrieve the data in each &quot;shard&quot;, based on a sharding function provided by the developer to hash keys, in order to exploit data locality specific to the needs of their application.</p>
+<p>Data locality is important, as LSD.js is capable of storing GBs of data, which would hardly fit in most mobile devices&#39; memory, especially an iframe, which is a full nested browsing context, is needed for each &quot;shard&quot;. Hence, for performance, it &quot;pages&quot; shards in and out as needed, loading and unloading iframes, and making sure data is garbage collected, based on a LRU cache of configurable size.</p>
+<p>For example, the library which caches map tiles in our demo app hashes keys based on locality in rectangular regions, and configures the LRU cache to have a limit of 4, since that represents the worst case scenario, when the region of interest is at the intersection of 4 of these rectangular regions.</p>
+<h2 id='use-cases'>Use Cases</h2 id='use-cases'>
+<h3 id='use-cases/online-offline-travel'>Online / Offline Travel</h3 id='use-cases/online-offline-travel'>
 <h4><a href="http://lsdjs.info/map_demo.html">Offline Map Cache Demo</a></h4>
 <h2 id='dependencies'>Dependencies</h2 id='dependencies'>
 <ul>
