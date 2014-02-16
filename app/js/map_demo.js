@@ -77,6 +77,9 @@
     alert("Cached!");
   }
 
+  $('#myModal').on('show', function(){console.log(LSD.getShardLengths());});
+
+
   $('.cache-me').click(cacheMap);
 
   function getAllAround(e) {
