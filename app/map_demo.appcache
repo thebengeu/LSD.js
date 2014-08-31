@@ -1,6 +1,6 @@
 CACHE MANIFEST
 
-#version 1.1 2-16-2014
+#version 1.2 2-16-2014
 
 CACHE:
 
@@ -34,6 +34,8 @@ http://oauth.googlecode.com/svn/code/javascript/sha1.js
 js/yelp.js
 js/map_demo.js
 js/vendor/offline.min.js
+js/vendor/jquery.flot.min.js
+js/vendor/jquery.flot.time.min.js
 
 NETWORK:
 *
